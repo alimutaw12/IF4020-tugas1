@@ -1,0 +1,103 @@
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh' crossorigin='anonymous')
+    title Hello, world!
+  
+  body
+    .container
+      form
+        .form-group
+          label(for='cipher') Pilih jenis cipher
+          select#cipher.form-control
+            option Vigenere Cipher Standard
+            option Auto Key Vigenere Cipher
+            option Extended Vigenere Cipher
+            option Playfair Cipher
+            option Affine Cipher
+            option Hill Cipher
+            option Super Cipher
+        .form-group
+          label(for='text') Text
+          textarea#text.form-control(rows='2')
+        .form-group
+          label(for='key') Key
+          textarea#key.form-control(rows='1')
+
+        button.btn.btn-encrypt.btn-success.mr-3 Encrypt
+        button.btn.btn-decrypt.btn-danger Decrypt
+
+        .form-group#result-group
+          label#label-result(for='result-text')
+          textarea#result-text.form-control(rows='2')
+
+    script(type='text/javascript').
+      var text = document.querySelector("#text");
+      var key = document.querySelector("#key");
+
+      var result = document.querySelector("#result-group");
+      var labelResult = document.querySelector("#label-result");
+      var textResult = document.querySelector("#result-group #result-text");
+
+      result.style.display = "none";
+      
+      function getSelectedOptions(select) {
+        var options = select.getElementsByTagName('option');
+        for (var i = 0; i < options.length; i++) {
+          if (options[i].selected)
+            return options[i];
+        };
+      }
+
+      var cipher = {
+        "Vigenere Cipher Standard": "vigenere",
+        "Auto Key Vigenere Cipher": "autokey"
+        "Extended Vigenere Cipher": "extended",
+        "Playfair Cipher": "playfair",
+        "Affine Cipher": "affine",
+        "Hill Cipher": "hill",
+        "Super Cipher": "super",
+      }
+
+      document.querySelector(".btn-encrypt").addEventListener("click", function(event) {
+        event.preventDefault();
+
+        var select = document.querySelector('#cipher');
+        var selectedOption = getSelectedOptions(select).text;
+
+        fetch(`/encrypt/${cipher[selectedOption]}/${text.value}/${key.value}`)
+          .then(async function(data) {
+            var encryptedText = await data.json();
+
+            result.style.display = "block";
+            labelResult.innerHTML = "Hasil encrypt"
+            textResult.innerHTML = encryptedText.data;
+          })
+          .catch(function(err) {
+            console.error(err);
+          })
+      });
+
+       document.querySelector(".btn-decrypt").addEventListener("click", function(event) {
+        event.preventDefault();
+
+        var select = document.querySelector('#cipher');
+        var selectedOption = getSelectedOptions(select).text;
+
+        fetch(`/decrypt/${cipher[selectedOption]}/${text.value}/${key.value}`)
+          .then(async function(data) {
+            var decryptedText = await data.json();
+
+            result.style.display = "block";
+            labelResult.innerHTML = "Hasil decrypt"
+            textResult.innerHTML = decryptedText.data;
+          })
+          .catch(function(err) {
+            console.error(err);
+          })
+      });
+
+    script(src='https://code.jquery.com/jquery-3.4.1.slim.min.js' integrity='sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n' crossorigin='anonymous')
+    script(src='https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js' integrity='sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo' crossorigin='anonymous')
+    script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js' integrity='sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6' crossorigin='anonymous')
