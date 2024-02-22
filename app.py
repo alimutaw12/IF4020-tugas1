@@ -1,9 +1,9 @@
 from flask import Flask, render_template, jsonify, request
 import json
-from cipher.cripto import VigenereCipher
-from cipher.cripto2 import VigenereCipherAutoKey
-from cipher.cripto3 import AffineCipher
-from cipher.cripto4 import HillCipher
+from cipher.vigenere_cipher import VigenereCipher
+from cipher.vigenere_cipher_auto_key import VigenereCipherAutoKey
+from cipher.affine_cipher import AffineCipher
+from cipher.hill_cipher import HillCipher
 from cipher.playfair import PlayfairCipher
 from cipher.vigenere_extended import ExtendedVigenereCipher
 import numpy as np
