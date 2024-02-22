@@ -1,19 +1,23 @@
 import numpy as np
-import utils
+from cipher.utils import Utils
 
 class HillCipher:
-    def encrypt(self, plain_text, k, matrix_key):
+    def __init__(self):
+        self.utils = Utils()
+
+    def encrypt(self, plain_text, matrix_key):
+        k = 3
         while len(plain_text) % k != 0:
             plain_text += 'z'
 
         plain_text = plain_text.lower()
-        plain_text = utils.clearString(plain_text)
+        plain_text = self.utils.clearString(plain_text)
         i = 0
         j = 0
         chipher_text = ''
         matrix = []
         while i < len(plain_text):
-            matrix.append([utils.charToInt(plain_text[i])])
+            matrix.append([self.utils.charToInt(plain_text[i])])
             i += 1
             j += 1
             if j >= k:
@@ -21,18 +25,22 @@ class HillCipher:
                 m = np.dot(matrix_key, matrix)
                 matrix = []
                 for l in range(len(m)):
-                    chipher_text += utils.intToChar(m[l][0] % 26)
+                    chipher_text += self.utils.intToChar(m[l][0] % 26)
+                
+        print('chiper_text')
+        print(chipher_text)
         
         return chipher_text
 
-    def decrypt(self, chipher_text, k, matrix_key):
+    def decrypt(self, chipher_text, matrix_key):
+        k = 3
         i = 0
         j = 0
         plain_text = ''
         matrix = []
         inverse_matrix = self.inverseMatrix(matrix_key)
         while i < len(chipher_text):
-            matrix.append([utils.charToInt(chipher_text[i])])
+            matrix.append([self.utils.charToInt(chipher_text[i])])
             i += 1
             j += 1
             if j >= k:
@@ -40,7 +48,7 @@ class HillCipher:
                 m = np.dot(inverse_matrix, matrix)
                 matrix = []
                 for l in range(len(m)):
-                    plain_text += utils.intToChar(m[l][0] % 26)
+                    plain_text += self.utils.intToChar(m[l][0] % 26)
         
         return plain_text
 
@@ -68,7 +76,7 @@ class HillCipher:
         det = self.determinant3x3(matrix)
         det = det % 26
 
-        inverse_modulo = utils.inverseModulo(det, 26)
+        inverse_modulo = self.utils.inverseModulo(det, 26)
 
         adjoint = self.adjointMatrix(matrix)
 
@@ -85,12 +93,12 @@ class HillCipher:
         return adjoint.astype(np.int32)
 
 
-utils = utils.Utils()
-algo = HillCipher()
+# utils = self.utils.Utils()
+# algo = HillCipher()
 
-matrix = np.array([[17, 17, 5], [21, 18, 21], [2, 2, 19]])
+# matrix = np.array([[17, 17, 5], [21, 18, 21], [2, 2, 19]])
 
-chipher_text = algo.encrypt('paymoremoney', 3, matrix)
-print(chipher_text)
-plain_text = algo.decrypt(chipher_text, 3, matrix)
-print(plain_text)
+# chipher_text = algo.encrypt('paymoremoney', 3, matrix)
+# print(chipher_text)
+# plain_text = algo.decrypt(chipher_text, 3, matrix)
+# print(plain_text)
