@@ -3,6 +3,8 @@ import json
 from cipher.cripto import VigenereCipher
 from cipher.cripto2 import VigenereCipherAutoKey
 from cipher.cripto3 import AffineCipher
+from cipher.playfair import PlayfairCipher
+from cipher.vigenere_extended import ExtendedVigenereCipher
 
 app = Flask(__name__)
 
@@ -23,6 +25,10 @@ def encrypt():
     elif (cipher == '2'):
         algo = VigenereCipherAutoKey()
         key = algo.generateKey(plain_text, key)
+    elif (cipher == '3'):
+        algo = ExtendedVigenereCipher()
+    elif (cipher == '4'):
+        algo = PlayfairCipher()
     elif (cipher == '5'):
         algo = AffineCipher()
         try:
@@ -68,6 +74,10 @@ def decrypt():
     elif (cipher == '2'):
         algo = VigenereCipherAutoKey()
         key = algo.generateKey(plain_text, key)
+    elif (cipher == '3'):
+        algo = ExtendedVigenereCipher()
+    elif (cipher == '4'):
+        algo = PlayfairCipher()
     elif (cipher == '5'):
         algo = AffineCipher()
         try:
