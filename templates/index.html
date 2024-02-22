@@ -35,9 +35,11 @@
         
         <div class="form-group" id="result-group" style="display: none;">
             <label id="label-result" for="result-text"></label>
-            <textarea class="form-control" id="result-text" rows="2"></textarea>
+            <textarea class="form-control" id="result-text" rows="2" disabled></textarea>
             <label for="result-text">Key</label>
-            <textarea class="form-control" id="result-key" rows="2"></textarea>
+            <textarea class="form-control" id="result-key" rows="2" disabled></textarea>
+            <label for="result-text">Base 64</label>
+            <textarea class="form-control" id="result-base64" rows="2" disabled></textarea>
         </div>
     
     </div>
@@ -52,6 +54,7 @@
         const labelResult = document.querySelector("#label-result");
         const textResult = document.querySelector("#result-group #result-text");
         const keyResult = document.querySelector("#result-group #result-key");
+        const base64Result = document.querySelector("#result-group #result-base64");
         document.querySelector(".btn-encrypt").addEventListener("click", function(event) {
             event.preventDefault();
 
@@ -79,6 +82,7 @@
                 labelResult.innerHTML = "Hasil encrypt"
                 textResult.innerHTML = data.chipherText;
                 keyResult.innerHTML = data.key;
+                base64Result.innerHTML = btoa(data.chipherText);
             })
             .catch(function(err) {
                 console.error(err);
@@ -112,6 +116,7 @@
                 labelResult.innerHTML = "Hasil decrypt"
                 textResult.innerHTML = data.plainText;
                 keyResult.innerHTML = data.key;
+                base64Result.innerHTML = btoa(data.plainText);
             })
             .catch(function(err) {
                 console.error(err);
